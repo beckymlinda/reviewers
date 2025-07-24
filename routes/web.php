@@ -29,5 +29,7 @@ Route::resource('reviewers', \App\Http\Controllers\ReviewerController::class)->m
 // routes/web.php
 use App\Http\Controllers\AuditTrailController;
 Route::get('/audit-trail', [AuditTrailController::class, 'index'])->name('admin.audit.index');
+use App\Http\Controllers\AccreditationController;
+Route::resource('accreditations', AccreditationController::class);
 
 

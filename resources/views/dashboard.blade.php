@@ -81,6 +81,12 @@
    data-url="{{ route('admin.audit.index') }}">
    <i class="bi bi-clock-history me-2"></i> Audit Trail
 </a>
+<a href="#" 
+   class="sidebar-link hover-purple mb-2 text-decoration-none load-page" 
+   data-url="{{ route('accreditations.index') }}">
+   <i class="bi bi-journal-check me-2"></i> Accreditations
+</a>
+
 
         <a href="#" class="sidebar-link hover-purple mb-2 text-decoration-none">
             <i class="bi bi-shield-lock me-2"></i> Roles & Permissions
@@ -311,7 +317,55 @@ $(document).on('submit', 'form', function(e) {
     });
 });
 </script>
+ 
 
+<script>
+    $(document).on('click', '.delete-btn', function (e) {
+    e.preventDefault();
+    
+    if (!confirm('Are you sure you want to delete this record?')) return;
+
+    const button = $(this);
+    const url = button.data('url');
+
+    // Optional: show loading state
+    $('#main-panel').html(`
+        <div class="text-center py-5">
+            <div class="spinner-border text-danger" role="status">
+                <span class="visually-hidden">Deleting...</span>
+            </div>
+        </div>
+    `);
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            _method: 'DELETE',
+            _token: '{{ csrf_token() }}'
+        },
+        success: function (response) {
+            if (response.success && response.redirect) {
+                $.get(response.redirect, function (html) {
+                    const alert = `
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            ${response.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    `;
+                    $('#main-panel').html(alert + html);
+                });
+            } else {
+                $('#main-panel').html('<div class="alert alert-danger">Delete failed.</div>');
+            }
+        },
+        error: function () {
+            $('#main-panel').html('<div class="alert alert-danger">An error occurred while deleting.</div>');
+        }
+    });
+});
+
+</script>
 
 </body>
 

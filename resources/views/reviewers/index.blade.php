@@ -47,7 +47,7 @@
     </table>
 </div>
 <style>
-    <style>
+    
   #searchInput {
     max-width: 400px;
     margin-bottom: 1rem;
